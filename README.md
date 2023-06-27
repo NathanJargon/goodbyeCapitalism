@@ -6,3 +6,5 @@ The website incorporates various styling elements using CSS to enhance its visua
 The JavaScript code controls the behavior and functionality of the website. It includes a timer that counts down from 60 seconds. When the user clicks on the "Goodbye Capitalism" text, it triggers the movement animation and updates the score. If the score reaches 1, the timer starts counting down. Once the timer reaches zero, a completion message is displayed, congratulating the user on their achievements and expressing the final score.
 
 This website offers an engaging and interactive experience, combining the power of HTML, CSS, and JavaScript to create a visually appealing and dynamic environment centered around the phrase "Goodbye Capitalism."
+
+https://nathanjargon.github.io/goodbyeCapitalism/
