@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Goodbye Capitalism</title>
+    <style>
+        body {
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+        .container {
+            position: relative;
+            width: 80vw;
+            height: 80vh;
+            background-color: black;
+            overflow: hidden;
+        }
+        h1 {
+            color: white;
+            font-size: 48px;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            position: absolute;
+            user-select: none;
+            animation: shake 1s infinite;
+        }
+        @keyframes shake {
+            0% {
+                transform: translate(0, 0) rotate(0);
+            }
+            25% {
+                transform: translate(-5px, -5px) rotate(-5deg);
+            }
+            50% {
+                transform: translate(0, 0) rotate(0);
+            }
+            75% {
+                transform: translate(5px, -5px) rotate(5deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0);
+            }
+        }
+        .score {
+            position: absolute;
+            font-family: "Courier New", monospace;
+            bottom: 10px;
+            right: 10px;
+            color: white;
+            font-size: 24px;
+            user-select: none;
+        }
+        .title-author {
+            color: black;
+            font-size: 32px;
+            margin-bottom: 10px;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: "Courier New", monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 10s steps(20) infinite;
+            user-select: none;
+        }
+        .timer {
+            color: white;
+            font-family: "Courier New", monospace;
+            font-size: 48px;
+            user-select: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .completion-message {
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 20px;
+            user-select: none;
+        }
+        .play-again {
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 20px;
+            user-select: none;
+        }
+        .play-again {
+            color: white;
+            font-family: "Courier New", monospace;
+            position: absolute;
+            top: 45%;
+            left: 28%;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .play-again:hover {
+            text-decoration: underline;
+        }
+        .completion-message {
+        position: absolute;
+        font-family: "Courier New", monospace;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 42px;
+        text-align: center;
+        }
+
+        @keyframes typing {
+            0% {
+                width: 0;
+            }
+            50% {
+                width: 50%;
+            }
+            60% {
+                width: 50%;
+            }
+            70% {
+                width: 50%;
+            }
+            80% {
+                width: 50%;
+            }
+            90% {
+                width: 50%;
+            }
+            100% {
+                width: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2 class="title-author">Goodbye Capitalism by Synochrina</h2>
+    <div class="container">
+        <div class="timer" id="timer">01:00</div>
+        <h1 id="title">Goodbye Capitalism</h1>
+        <div class="score" id="score">Score: 0</div>
+    </div>
+
+    <audio src="ost.mp3" autoplay loop></audio>
+
+    <script>
+        var titleElement = document.getElementById('title');
+        var titleAuthorElement = document.querySelector('.title-author');
+        var screenWidth = window.innerWidth;
+        var screenHeight = window.innerHeight;
+        var containerWidth = document.querySelector('.container').offsetWidth;
+        var containerHeight = document.querySelector('.container').offsetHeight;
+        var scoreElement = document.getElementById('score');
+        var scoreCount = 0;
+        var animationPaused = true;
+        var timerElement = document.getElementById('timer');
+        var totalTimeInSeconds = 1; // Total time for the timer in seconds
+        var timeRemaining = totalTimeInSeconds;
+        var timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000); // Update the timer every second
+        }
+
+        function updateTimer() {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                timerElement.textContent = formatTime(timeRemaining);
+            } else {
+                clearInterval(timerInterval);
+                showCompletionMessage();
+            }
+        }
+
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            var remainingSeconds = seconds % 60;
+            return minutes.toString().padStart(2, '0') + ':' + remainingSeconds.toString().padStart(2, '0');
+        }
+
+        function showCompletionMessage() {
+            var completionMessage = document.createElement('div');
+            completionMessage.className = 'completion-message';
+            completionMessage.textContent = 'Congratulations! You got ' + scoreCount + ' points.';
+            
+            var playAgain = document.createElement('div');
+            playAgain.className = 'play-again';
+            playAgain.textContent = 'Click me if you want to try again?';
+            playAgain.addEventListener('click', resetGame);
+
+            var container = document.querySelector('.container');
+            container.innerHTML = '';
+            container.appendChild(completionMessage);
+            container.appendChild(playAgain);
+        }
+
+        function resetGame() {
+            var container = document.querySelector('.container');
+            container.innerHTML = '';
+            container.appendChild(timerElement);
+            container.appendChild(titleElement);
+            container.appendChild(scoreElement);
+            scoreCount = 0;
+            timerElement.textContent = '01:00';
+            scoreElement.textContent = 'Score: 0';
+            timeRemaining = totalTimeInSeconds;
+        }   
+
+        titleElement.addEventListener('click', function () {
+        if (animationPaused) {
+            titleAuthorElement.style.animationPlayState = 'running';
+            animationPaused = false;
+        } else {
+            moveTitleRandomly();
+            setRandomFontSize();
+            setRandomColor();
+            updateScoreCount();
+        }
+        });
+
+
+        titleAuthorElement.addEventListener('click', function () {
+            if (animationPaused) {
+                titleAuthorElement.style.animation = 'typing 10s steps(20) infinite';
+                animationPaused = false;
+            } else {
+                titleAuthorElement.style.animation = 'none';
+                animationPaused = true;
+            }
+        });
+
+        function moveTitleRandomly() {
+            var randomX = Math.random() * (containerWidth - titleElement.offsetWidth);
+            var randomY = Math.random() * (containerHeight - titleElement.offsetHeight);
+            titleElement.style.left = randomX + 'px';
+            titleElement.style.top = randomY + 'px';
+        }
+
+        function setRandomFontSize() {
+            var randomFontSize = Math.floor(Math.random() * 48) + 12; // Random font size between 12px and 60px
+            titleElement.style.fontSize = randomFontSize + 'px';
+        }
+
+        function setRandomColor() {
+            var randomColor = getRandomHexColor();
+            titleElement.style.color = randomColor;
+        }
+
+        function getRandomHexColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function updateScoreCount() {
+            scoreCount += 1;
+            scoreElement.textContent = 'Score: ' + scoreCount;
+            if (scoreCount === 1) {
+                startTimer();
+            }
+        }
+    </script>
+
+</body>
+</html>
